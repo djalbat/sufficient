@@ -3,17 +3,19 @@
 const Task = require('../task');
 
 class SynchronousTask extends Task {
-  constructor(method, ...remainingArguments) {
-    const synchronous = true;
+  constructor(synchronousMethod, ...remainingArguments) {
+    const synchronous = true,
+          method = synchronousMethod; ///
     
     super(synchronous, method, remainingArguments);
   }
 
   execute() {
     const method = this.getMethod(),
+          synchronousMethod = method, ///
           remainingArguments = this.getRemainingArguments();
-    
-    method.call(null, ...remainingArguments);
+
+    synchronousMethod.call(null, ...remainingArguments);
   }
 }
 
