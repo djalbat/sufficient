@@ -1,28 +1,29 @@
 'use strict';
 
-class AsynchronousTask {
+const Task = require('../task');
+
+class AsynchronousTask extends Task {
   constructor(method, model, view, ...remainingArguments) {
-    const lastRemainingArgument = remainingArguments.pop();
-    
-    this.method = method;
+    const synchronous = false,
+          lastRemainingArgument = remainingArguments.pop(),
+          callback = lastRemainingArgument; ///
 
-    this.model = model;
+    super(synchronous, method, model, view, remainingArguments);
 
-    this.view = view;
-
-    this.remainingArguments = remainingArguments;
-    
-    const done = lastRemainingArgument; ///
-
-    this.done = done;
+    this.callback = callback;
+  }
+  
+  getCallback() {
+    return this.callback;
   }
 
   execute(callback) {
-    this.method.call(null, this.model, this.view, ...this.remainingArguments, callback);
-  }
-  
-  callback() {
-    this.done();
+    const method = this.getMethod(),
+          model = this.getModel(),
+          view = this.getView(),
+          remainingArguments = this.getRemainingArguments();
+
+    method.call(null, model, view, ...remainingArguments, callback);
   }
 }
 

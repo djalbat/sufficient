@@ -1,26 +1,21 @@
 'use strict';
 
-class SynchronousTask {
+const Task = require('../task');
+
+class SynchronousTask extends Task {
   constructor(method, model, view, ...remainingArguments) {
-
+    const synchronous = true;
     
-    this.method = method;
-
-    this.model = model;
-
-    this.view = view;
-
-    this.remainingArguments = remainingArguments;
-
-
-    
-    
+    super(synchronous, method, model, view, remainingArguments);
   }
 
-  execute(done) {
-    this.method.call(null, this.model, this.view, ...this.remainingArguments);
-
-    done();
+  execute() {
+    const method = this.getMethod(),
+          model = this.getModel(),
+          view = this.getView(),
+          remainingArguments = this.getRemainingArguments();
+    
+    method.call(null, model, view, ...remainingArguments);
   }
 }
 
