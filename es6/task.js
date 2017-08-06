@@ -1,7 +1,7 @@
 'use strict';
 
 class Task {
-  constructor(synchronous, method, model, view, ...remainingArguments) {
+  constructor(synchronous, method, model, view, remainingArguments) {
     this.synchronous = synchronous;    
     this.method = method;
     this.model = model;
