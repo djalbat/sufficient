@@ -111,9 +111,9 @@ function createMethods(scheduler, model, view) {
 
 Note that if there is no need to pass control back to the view, the asynchronous functionality can mopped up by vacuous `done()` methods within the controller methods themselves.
 
-In the case of asynchronous tasks the scheduler will pass its own intermediate callback to the corresponding method to give itself the opportunity to remove the task from its queue. It will then invoke the given callback method, passing on the arguments. The tasks and scheduler are also agnostic to the method arguments. Here references to the model and view are passed but any number of arguments can be given. A look at the [SynchronousTask](https://github.com/djalbat/Sufficient/blob/master/es6/task/synchronous.js) and [AsynchronousTask](https://github.com/djalbat/Sufficient/blob/master/es6/task/asynchronous.js) should convince.
+In the case of asynchronous tasks the scheduler will pass its own intermediate callback to the corresponding method to give itself the opportunity to remove the task from its queue. It will then invoke the given callback method, passing on the arguments. 
 
-The scheduler can also be passed to any kind of concurrency manager than can itself create tasks and add them to the queue.
+The tasks and scheduler are also agnostic to the method arguments. In the above examples the references to the model and view have been utilised but any number of arguments can be passed to the task constructors. A look at the [SynchronousTask](https://github.com/djalbat/Sufficient/blob/master/es6/task/synchronous.js) and [AsynchronousTask](https://github.com/djalbat/Sufficient/blob/master/es6/task/asynchronous.js) implementations should convince. The scheduler can also be passed to any kind of concurrency manager than can itself create tasks and add them to the queue.
 
 Believe it or not that is it.
 
