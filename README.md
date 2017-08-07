@@ -115,8 +115,6 @@ In the case of asynchronous tasks the scheduler will pass its own intermediate c
 
 The tasks and scheduler are also agnostic to the method arguments. In the above examples the references to the model and view have been utilised but any number of arguments can be passed to the task constructors. A look at the [SynchronousTask](https://github.com/djalbat/Sufficient/blob/master/es6/task/synchronous.js) and [AsynchronousTask](https://github.com/djalbat/Sufficient/blob/master/es6/task/asynchronous.js) implementations should convince. The scheduler can also be passed to any kind of concurrency manager than can itself create tasks and add them to the queue.
 
-Believe it or not that is it.
-
 ## Contact
 
 - james.smith@djalbat.com
