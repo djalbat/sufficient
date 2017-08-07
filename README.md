@@ -2,6 +2,10 @@
 
 An MVC framework with scheduling.
 
+This framework came out as a result of work on [Juxtapose](https://github.com/djalbat/Juxtapose), which provides the means to create an application's view. The corresponding model will always be bespoke, so to speak, so there are no means to create it either here or there. That leaves the controller, which is implemented [here](https://github.com/djalbat/Sufficient/blob/master/es6/controller.js). The reason that Sufficient is called an MVC framework is that the more or less prescriptive guidelines for putting an application together are elucidated here in what follows.
+ 
+To gain an idea of how to put an application together using Sufficient and Juxtapose, it is a very good idea to watch the last few videos in the [The Joy of JSX](https://vimeo.com/album/4562013) series that went with Juxtapose. In particular the last video, [10 Traditional MVC](https://vimeo.com/album/4562013/video/227405572), is pretty much compulsory viewing. Also, there is an [MVC example application](https://github.com/djalbat/Juxtapose/blob/master/es6/examples/mvcApp.js) which you should get up and running. It's [controller](https://github.com/djalbat/Juxtapose/blob/master/es6/examples/mvcApp/controller.js) is identical to the one here aside from the lack of a reference to a schedule. In what follows it is tacitly assumed that you have more than a passing familiarity with this material. All that is added here is the guidelines laid out in writing an the addition of a scheduler. This scheduler is essential if you want to write an application that encompasses asynchronous behaviour such as accessing the file system or has concurrent functionality.  
+
 ## Installation
 
 You can install Sufficient with [npm](https://www.npmjs.com/):
