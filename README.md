@@ -78,7 +78,7 @@ The assignment `this.onClick(controller.resetPassword)` would not work.
 
 ## Creating tasks
 
-It is the job of controller methods to both leave themselves exposed to the view and to create the tasks that manage the relationship between the model and the view or carry out any other application functionality. Closure gives them access to the scheduler, model and view references, with the functionality typically being implemented by helper methods:
+It is the job of controller methods to both leave themselves exposed to the view and to create the tasks that manage the relationship between the model and the view or carry out any other application functionality. Closure gives them access to the scheduler, model and view, with the functionality typically being implemented by helper methods:
 
 ```js
 const sufficient = require('sufficient');
@@ -109,7 +109,13 @@ function createMethods(scheduler, model, view) {
 }
 ```
 
-Note that if there is no need to pass control back to the view, the asynchronous functionality can mopped up by a vacuous `done()` method within the controller method itself.
+Note that if there is no need to pass control back to the view, the asynchronous functionality can mopped up by vacuous `done()` methods within the controller methods themselves.
+
+In the case of asynchronous tasks the scheduler will pass its own intermediate callback to the corresponding method to give itself the opportunity to remove the task from its queue. It will then invoke the given callback method, passing on the arguments. The tasks and scheduler are also agnostic to the method arguments. Here references to the model and view are passed but any number of arguments can be given. A look at the [SynchronousTask](https://github.com/djalbat/Sufficient/blob/master/es6/task/synchronous.js) and [AsynchronousTask](https://github.com/djalbat/Sufficient/blob/master/es6/task/asynchronous.js) should convince.
+
+The scheduler can also be passed to any kind of concurrency manager than can itself create tasks and add them to the queue.
+
+Believe it or not that is it.
 
 ## Contact
 
