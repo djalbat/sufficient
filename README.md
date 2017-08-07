@@ -28,8 +28,7 @@ If you are building with [Node.js](http://nodejs.org) the usage is as follows:
 
 ```js
 const sufficient = require('sufficient'),
-      pathUtilities = sufficient.pathUtilities,
-      arrayUtilities = sufficient.arrayUtilities;
+      { Scheduler, controller } = sufficient;
 ```
 
 ## Compiling from source
