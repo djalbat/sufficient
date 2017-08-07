@@ -74,7 +74,42 @@ class ResetPasswordButton extends Element {
 }
 ```
 
-The assignment `this.onClick(controller.resetPassword)` would not work, for example.
+The assignment `this.onClick(controller.resetPassword)` would not work.
+
+## Creating tasks
+
+It is the job of controller methods to leave themselves exposed to the view and to create the tasks that manage the relationship between the model and the view or carry out any other application functionality. The tasks are created within the controller methods, which are themselves created from within the `createMethods()` method. Closure gives them access to the scheduler, model and view references with the functionality typically being implemented by helper methods:
+
+```js
+const sufficient = require('sufficient');
+
+const { SynchronousTask, AsynchronousTask } = sufficient;
+
+function createMethods(scheduler, model, view) {
+  function setPassword(password) {
+    const setPasswordAsynchronousTask = new AsynchronousTask(helper.setPassword, model, view, done);
+
+    scheduler.addTaskToQueue(setPasswordAsynchronousTask);
+    
+    function done() {
+    
+    }
+  }
+
+  function resetPassword() {
+    const resetPasswordSynchronousTask = new SynchronousTask(helper.resetPassword, model, view);
+
+    scheduler.addTaskToQueue(resetPasswordSynchronousTask);
+  }
+
+  return ({
+    setPassword: setPassword,
+    resetPassword: resetPassword
+  });
+}
+```
+
+Note that if there is no need to pass control back to the view, the asynchronous functionality can mopped up by a vacuous `done()` method within the controller method itself.
 
 ## Contact
 
