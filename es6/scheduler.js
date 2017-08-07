@@ -2,7 +2,7 @@
 
 const Queue = require('./queue');
 
-class Schedule {
+class Scheduler {
   constructor() {
     this.queue = new Queue();
   }
@@ -23,4 +23,4 @@ class Schedule {
   }
 }
 
-module.exports = Schedule;
+module.exports = Scheduler;

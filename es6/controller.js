@@ -2,8 +2,8 @@
 
 
 class Controller {
-  assignMethods(createMethods, schedule, model, view, ...remainingArguments) {
-    const methods = createMethods(schedule, model, view, ...remainingArguments);
+  assignMethods(createMethods, scheduler, model, view, ...remainingArguments) {
+    const methods = createMethods(scheduler, model, view, ...remainingArguments);
 
     Object.assign(this, methods);
   }

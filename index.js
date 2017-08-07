@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = {
+  Scheduler: require('./lib/scheduler'),
   controller: require('./lib/controller'),
-  Schedule: require('./lib/schedule'),
   SynchronousTask: require('./lib/task/synchronous'),
   AsynchronousTask: require('./lib/task/asynchronous')
 };
