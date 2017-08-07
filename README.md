@@ -78,7 +78,7 @@ The assignment `this.onClick(controller.resetPassword)` would not work.
 
 ## Creating tasks
 
-It is the job of controller methods to leave themselves exposed to the view and to create the tasks that manage the relationship between the model and the view or carry out any other application functionality. The tasks are created within the controller methods, which are themselves created from within the `createMethods()` method. Closure gives them access to the scheduler, model and view references with the functionality typically being implemented by helper methods:
+It is the job of controller methods to both leave themselves exposed to the view and to create the tasks that manage the relationship between the model and the view or carry out any other application functionality. Closure gives them access to the scheduler, model and view references, with the functionality typically being implemented by helper methods:
 
 ```js
 const sufficient = require('sufficient');
