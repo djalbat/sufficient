@@ -37,6 +37,44 @@ Automation is done with [npm scripts](https://docs.npmjs.com/misc/scripts), have
 
     npm run build-debug
     npm run watch-debug
+    
+## Main application architecture
+
+The basic idea is to create the view and model and to pass references to these, together with references to a scheduler and a method to make use of them all, to the `assignMethods()` method of the `controller` singleton. Only once methods have been assigned to the controller is the view attached to the browser's DOM:  
+    
+```js
+const scheduler = new Scheduler(),
+      model = new Model(),
+      view = <View />;
+
+controller.assignMethods(createMethods, scheduler, model, view);
+
+const body = new Body();
+
+body.prepend(view);
+```
+    
+## Invoking controller methods
+
+Aside from being required above, the controller should only be required, and therefore its methods only invoked, from view classes. And from within these classes controller methods should only be referenced at runtime and not compile time, so to speak. Remember that they are assigned dynamically after the view has been created and will therefore not be available when this happens. For example:
+
+```js
+class ResetPasswordButton extends Element {
+  clickHandler() {
+    controller.resetPassword();
+  }
+  
+  ...
+
+  initialise() {
+    this.onClick(this.clickHandler);
+  }
+  
+  ...
+}
+```
+
+The assignment `this.onClick(controller.resetPassword)` would not work, for example.
 
 ## Contact
 
