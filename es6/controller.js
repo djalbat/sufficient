@@ -1,6 +1,5 @@
 'use strict';
 
-
 class Controller {
   assignMethods(createMethods, scheduler, model, view, ...remainingArguments) {
     const methods = createMethods(scheduler, model, view, ...remainingArguments);
