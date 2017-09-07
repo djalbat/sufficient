@@ -83,21 +83,20 @@ It is the job of controller methods to be available to the view as well as to cr
 ```js
 const sufficient = require('sufficient');
 
+const setPasswordHelper = require('./helper/setPassword'),
+      resetPasswordHelper = require('./helper/resetPassword');
+
 const { SynchronousTask, AsynchronousTask } = sufficient;
 
 function createMethods(scheduler, model, view) {
   function setPassword(password) {
-    const setPasswordAsynchronousTask = new AsynchronousTask(helper.setPassword, model, view, done);
+    const setPasswordAsynchronousTask = new AsynchronousTask(setPasswordHelper, model, view, done);
 
     scheduler.addTaskToQueue(setPasswordAsynchronousTask);
-    
-    function done() {
-    
-    }
   }
 
   function resetPassword() {
-    const resetPasswordSynchronousTask = new SynchronousTask(helper.resetPassword, model, view);
+    const resetPasswordSynchronousTask = new SynchronousTask(resetPasswordHelper, model, view);
 
     scheduler.addTaskToQueue(resetPasswordSynchronousTask);
   }
@@ -110,6 +109,66 @@ function createMethods(scheduler, model, view) {
 ```
 
 Note that if there is no need to pass control back to the view, the asynchronous functionality can mopped up by vacuous `done()` methods within the controller methods themselves.
+
+Alternatively, the `SynchronousTask` and `AsynchronousTask` classes can be sub-classed, with the helper methods now private methods that reside in the files that contain the class definitions: 
+
+```js
+const SetPasswordAsynchronousTask = require('./task/asynchronous/setPassword'),
+      ResetPasswordSynchronousTask = require('./task/synchronous/resetPassword');
+
+function createMethods(scheduler, model, view) {
+  function setPassword(password) {
+    const setPasswordAsynchronousTask = new SetPasswordAsynchronousTask(model, view, done);
+
+    scheduler.addTaskToQueue(setPasswordAsynchronousTask);
+  }
+
+  function resetPassword() {
+    const resetPasswordSynchronousTask = ResetPasswordSynchronousTask(helper.resetPassword, model, view);
+
+    scheduler.addTaskToQueue(resetPasswordSynchronousTask);
+  }
+
+  return ({
+    setPassword: setPassword,
+    resetPassword: resetPassword
+  });
+}
+```
+
+```js
+const sufficient = require('sufficient');
+
+const { AsynchronousTask } = sufficient;
+
+class SetPasswordAsynchronousTask extends AsynchronousTask {
+  constructor(model, view, done) {
+    super(setPassword, model, view, done);
+  }
+}
+
+function setPassword(model, view, done) {
+    ...
+    
+    done();
+}
+```
+
+```js
+const sufficient = require('sufficient');
+
+const { SynchronousTask } = sufficient;
+
+class ResetPasswordSynchronousTask extends SynchronousTask {
+  constructor(model, view) {
+    super(resetPassword, model, view);
+  }
+}
+
+function resetPassword(model, view) {
+    ....
+}
+```
 
 In the case of asynchronous tasks the scheduler will pass its own intermediate callback to the corresponding method in order to give itself the opportunity to remove the task from its queue. It will then invoke the given callback method, which must be the last argument passed to the constructor, passing on the arguments. 
 
