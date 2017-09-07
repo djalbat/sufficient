@@ -108,8 +108,6 @@ function createMethods(scheduler, model, view) {
 }
 ```
 
-Note that if there is no need to pass control back to the view, the asynchronous functionality can mopped up by vacuous `done()` methods within the controller methods themselves.
-
 Alternatively, the `SynchronousTask` and `AsynchronousTask` classes can be sub-classed, with the helper methods now private methods that reside in the files that contain the class definitions: 
 
 ```js
