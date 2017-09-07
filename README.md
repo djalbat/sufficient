@@ -124,7 +124,7 @@ function createMethods(scheduler, model, view) {
   }
 
   function resetPassword() {
-    const resetPasswordSynchronousTask = ResetPasswordSynchronousTask(helper.resetPassword, model, view);
+    const resetPasswordSynchronousTask = ResetPasswordSynchronousTask(model, view);
 
     scheduler.addTaskToQueue(resetPasswordSynchronousTask);
   }
