@@ -25,32 +25,32 @@ class Queue {
           firstTaskSynchronous = firstTask.isSynchronous();
     
     if (firstTaskSynchronous) { ///
-      this.executeSynchronousFirstTask();
+      const synchronousFirstTask = firstTask;  ///
+
+      this.executeSynchronousFirstTask(synchronousFirstTask);
     } else {
-      this.executeAsynchronousFirstTask();
+      const asynchronousFirstTask = firstTask;  ///
+
+      this.executeAsynchronousFirstTask(asynchronousFirstTask);
     }
   }
 
-  executeAsynchronousFirstTask() {
-    const firstTask = first(this.tasks);
+  executeSynchronousFirstTask(synchronousFirstTask) {
+    synchronousFirstTask.execute();
 
-    firstTask.execute(function() {
-      const callback = firstTask.getCallback();
+    this.next();
+  }
+
+  executeAsynchronousFirstTask(asynchronousFirstTask) {
+    asynchronousFirstTask.execute(function() {
+      const callback = asynchronousFirstTask.getCallback();
       
-      callback.apply(firstTask, arguments);
+      callback.apply(asynchronousFirstTask, arguments);
       
       this.next();
     }.bind(this));
   }
 
-  executeSynchronousFirstTask() {
-    const firstTask = first(this.tasks);
-
-    firstTask.execute();
-    
-    this.next();
-  }
-  
   next() {
     this.tasks.shift();
 
