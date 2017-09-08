@@ -6,7 +6,7 @@ This framework came into being as a result of work on [Juxtapose](https://github
  
 To gain an idea of how to put an application together using Sufficient and Juxtapose, it is a very good idea to watch the last few videos in the [The Joy of JSX](https://vimeo.com/album/4562013) series that went with Juxtapose, especially the last video, [10 Traditional MVC](https://vimeo.com/album/4562013/video/227405572). This video describes an MVC example application which you should probably get up and running yourself. It's [controller](https://github.com/djalbat/Juxtapose/blob/master/es6/examples/mvcApp/controller.js) is identical to the one here, in fact, aside from the lack of a reference to a scheduler. In what follows it is tacitly assumed that you have more than a passing familiarity with this material. 
 
-In summary, all that is to be found here is a [scheduler](https://github.com/djalbat/Sufficient/blob/master/es6/scheduler.js) and a modified [controller](https://github.com/djalbat/Sufficient/blob/master/es6/controller.js), together with some guidelines which you should follow in order to put it all together. The scheduler seems to be essential if you want to write an application that encompasses asynchronous behaviour such as accessing the file system or has concurrent functionality.  
+In summary, all that is to be found here is a [scheduler](https://github.com/djalbat/Sufficient/blob/master/es6/scheduler.js) and a modified [controller](https://github.com/djalbat/Sufficient/blob/master/es6/controller.js), together with some patterns and guidelines which you should follow in order to put it all together. The scheduler will be needed if you want to write an application that encompasses asynchronous behaviour such as accessing the file system, or has concurrent functionality.  
 
 ## Installation
 
@@ -56,7 +56,7 @@ body.prepend(view);
     
 ## Invoking controller methods
 
-Aside from being required above, the controller should only be required, and therefore its methods only invoked, from view classes. And from within these classes controller methods should only be referenced at runtime and not compile time, so to speak. Remember that they are assigned dynamically after the view has been created and will therefore not be available when this happens. For example:
+Aside from being required above, the controller should only be required, and therefore its methods only invoked, from view classes. And from within these classes controller methods should only be referenced at runtime and not compile time, so to speak. Remember that they are assigned dynamically after the view has been created and will therefore not be available until after this happens. For example, the following will work because the `controller.resetPassword()` method is called from within the body of the `clickHandler()` method:
 
 ```js
 class ResetPasswordButton extends Element {
@@ -74,11 +74,11 @@ class ResetPasswordButton extends Element {
 }
 ```
 
-The assignment `this.onClick(controller.resetPassword)` would not work.
+On the other hand, the direct assignment `this.onClick(controller.resetPassword)` would not work.
 
 ## Creating tasks
 
-It is the job of controller methods to be available to the view as well as to create the tasks that manage the relationship between model and view or to carry out any other application functionality. Closure gives them access to the scheduler, the model and the view, with the functionality typically being implemented by helper methods:
+It is the job of controller methods to be available to the view as well as to create the tasks that manage the relationship between model and view or to carry out any other application functionality. Closure gives them access to the scheduler, the model and the view, with the aforementioned functionality typically being implemented by helper methods:
 
 ```js
 const sufficient = require('sufficient');
@@ -108,7 +108,7 @@ function createMethods(scheduler, model, view) {
 }
 ```
 
-Alternatively, the `SynchronousTask` and `AsynchronousTask` classes can be sub-classed, with the helper methods now private methods that reside in the files that contain the class definitions: 
+Alternatively, the `SynchronousTask` and `AsynchronousTask` classes can be sub-classed, with the helper methods now effectively becoming private methods that reside in the files that contain the class definitions: 
 
 ```js
 const SetPasswordAsynchronousTask = require('./task/asynchronous/setPassword'),
@@ -134,6 +134,8 @@ function createMethods(scheduler, model, view) {
 }
 ```
 
+The task class definitions are as follows:
+
 ```js
 const sufficient = require('sufficient');
 
@@ -144,6 +146,8 @@ class SetPasswordAsynchronousTask extends AsynchronousTask {
     super(setPassword, model, view, done);
   }
 }
+
+module.exports = SetPasswordAsynchronousTask;
 
 function setPassword(model, view, done) {
     ...
@@ -163,14 +167,16 @@ class ResetPasswordSynchronousTask extends SynchronousTask {
   }
 }
 
+module.exports = ResetPasswordSynchronousTask;
+
 function resetPassword(model, view) {
     ....
 }
 ```
 
-In the case of asynchronous tasks the scheduler will pass its own intermediate callback to the corresponding method in order to give itself the opportunity to remove the task from its queue. It will then invoke the given callback method, which must be the last argument passed to the constructor, passing on the arguments. 
+In the case of asynchronous tasks the scheduler will pass its own intermediate callback to the corresponding method in order to give itself the opportunity to remove the task from its queue. It will then invoke the given callback method, which must be the last argument passed to the constructor, passing on the arguments. In the synchronous case, tasks are removed from the queue immediately after their corresponding methods have been invoked.
 
-The tasks and scheduler are also agnostic to the method arguments. In the above examples the references to the model and view have been utilised but any number of arguments can be passed to the task constructors. A look at the [SynchronousTask](https://github.com/djalbat/Sufficient/blob/master/es6/task/synchronous.js) and [AsynchronousTask](https://github.com/djalbat/Sufficient/blob/master/es6/task/asynchronous.js) classes should convince. The scheduler can also be passed to a concurrency manager, say, that can also create tasks and add them to the queue.
+The tasks and scheduler are also agnostic to the method arguments. In the above examples the references to the model and view have been utilised but any number of arguments can be passed to the task constructors. A look at the [SynchronousTask](https://github.com/djalbat/Sufficient/blob/master/es6/task/synchronous.js) and [AsynchronousTask](https://github.com/djalbat/Sufficient/blob/master/es6/task/asynchronous.js) classes should convince.
 
 ## Contact
 
