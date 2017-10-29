@@ -56,7 +56,21 @@ body.prepend(view);
     
 ## Invoking controller methods
 
-Aside from being required above, the controller should only be required, and therefore its methods only invoked, from view classes. And from within these classes controller methods should only be referenced at runtime and not compile time, so to speak. Remember that they are assigned dynamically after the view has been created and will therefore not be available until after this happens. For example, the following will work because the `controller.resetPassword()` method is called from within the body of the `clickHandler()` method:
+Aside from being required above, the controller should only be required, and therefore its methods only invoked, from within the view classes. Furthermore, the controller's methods should not be referenced when the JavaScript is first executed, but only in response to user events. To see why, consider the following:
+
+```js
+class ResetPasswordButton extends Element {
+  ...
+
+  initialise() {
+    this.onClick(controller.resetPassword);
+  }
+
+  ...
+}
+```
+
+This will most likely not work because it is most unlikely that the `resetPassword()` method will have been attached to the `controller` object by the time this code is executed. On the other hand, the following will work:
 
 ```js
 class ResetPasswordButton extends Element {
@@ -74,7 +88,7 @@ class ResetPasswordButton extends Element {
 }
 ```
 
-On the other hand, the direct assignment `this.onClick(controller.resetPassword)` would not work.
+Here the body of the `clickHandler()` method will only be executed in response to user interaction and this can only happen once the view has been attached to the DOM. And, in turn, this happens only after all of the requisite methods have been attached to the `controller` object.
 
 ## Creating tasks
 
