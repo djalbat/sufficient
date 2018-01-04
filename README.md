@@ -8,6 +8,12 @@ To gain an idea of how to put an application together using Sufficient and Juxta
 
 In summary, all that is to be found here is a [scheduler](https://github.com/djalbat/Sufficient/blob/master/es6/scheduler.js) and a modified [controller](https://github.com/djalbat/Sufficient/blob/master/es6/controller.js), together with some patterns and guidelines which you should follow in order to put it all together. The scheduler will be needed if you want to write an application that encompasses asynchronous behaviour such as accessing the file system, or has concurrent functionality.  
 
+## Contents
+
+* [Main application architecture](#main-application-architecture)
+* [Invoking controller methods](#invoking-controller-methods)
+* [Creating tasks](#creating-tasks)
+
 ## Installation
 
 You can install Sufficient with [npm](https://www.npmjs.com/):
