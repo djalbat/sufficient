@@ -46,7 +46,7 @@ Automation is done with [npm scripts](https://docs.npmjs.com/misc/scripts), have
     
 ## Main application architecture
 
-The basic idea is to create the view and model and to pass references to these, together with references to a scheduler and a method to make use of them all, to the `assignMethods()` method of the `controller` singleton. Only once methods have been assigned to the controller is the view attached to the browser's DOM:  
+The basic idea is to create the view and model and to pass these, together with a scheduler and a method to make use of them all, to the `assignMethods()` method of the `controller` singleton. Only once methods have been assigned to the controller is the view attached to the browser's DOM:  
     
 ```js
 const scheduler = new Scheduler(),
