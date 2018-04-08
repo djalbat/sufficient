@@ -57,9 +57,7 @@ class Queue {
     const empty = this.isEmpty();
 
     if (!empty) {
-      const firstTask = first(this.tasks);
-
-      this.executeFirstTask(firstTask);
+      this.executeFirstTask();
     }
   }
   
