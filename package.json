@@ -1,7 +1,7 @@
 {
   "name": "sufficient",
   "author": "James Smith",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "license": "MIT",
   "homepage": "https://github.com/djalbat/Sufficient",
   "description": "An MVC framework with scheduling.",

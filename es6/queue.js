@@ -16,36 +16,37 @@ class Queue {
     const tasksLength = this.getTasksLength();
     
     if (tasksLength === 1) {
-      this.executeFirstTask();
+      this.executeNextTask();
     }
   }
 
-  executeFirstTask() {
+  executeNextTask() {
     const firstTask = first(this.tasks),
-          firstTaskSynchronous = firstTask.isSynchronous();
+          nextTask = firstTask, ///
+          nextTaskSynchronous = nextTask.isSynchronous();
     
-    if (firstTaskSynchronous) { ///
-      const synchronousFirstTask = firstTask;  ///
+    if (nextTaskSynchronous) { ///
+      const synchronousTask = nextTask;  ///
 
-      this.executeSynchronousFirstTask(synchronousFirstTask);
+      this.executeSynchronousTask(synchronousTask);
     } else {
-      const asynchronousFirstTask = firstTask;  ///
+      const asynchronousTask = nextTask;  ///
 
-      this.executeAsynchronousFirstTask(asynchronousFirstTask);
+      this.executeAsynchronousTask(asynchronousTask);
     }
   }
 
-  executeSynchronousFirstTask(synchronousFirstTask) {
-    synchronousFirstTask.execute();
+  executeSynchronousTask(synchronousTask) {
+    synchronousTask.execute();
 
     this.next();
   }
 
-  executeAsynchronousFirstTask(asynchronousFirstTask) {
-    asynchronousFirstTask.execute(function() {
-      const callback = asynchronousFirstTask.getCallback();
+  executeAsynchronousTask(asynchronousTask) {
+    asynchronousTask.execute(function() {
+      const callback = asynchronousTask.getCallback();
       
-      callback.apply(asynchronousFirstTask, arguments);
+      callback.apply(asynchronousTask, arguments);
       
       this.next();
     }.bind(this));
@@ -57,7 +58,7 @@ class Queue {
     const empty = this.isEmpty();
 
     if (!empty) {
-      this.executeFirstTask();
+      this.executeNextTask();
     }
   }
   
