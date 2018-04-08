@@ -3,8 +3,8 @@
 const Queue = require('./queue');
 
 class Scheduler {
-  constructor() {
-    this.queue = new Queue();
+  constructor(queue) {
+    this.queue = queue;
   }
 
   addTaskToQueue(task) {
@@ -20,6 +20,13 @@ class Scheduler {
     }
 
     return successful;
+  }
+
+  static fromNothing() {
+    const queue = Queue.fromNothing(),
+          scheduler = new Scheduler(queue);
+
+    return scheduler;
   }
 }
 

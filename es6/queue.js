@@ -6,8 +6,8 @@ const { arrayUtilities } = necessary,
       { first } = arrayUtilities;
 
 class Queue {
-  constructor() {
-    this.tasks = [];
+  constructor(tasks) {
+    this.tasks = tasks;
   }
 
   addTask(task) {
@@ -74,6 +74,13 @@ class Queue {
           empty = (tasksLength === 0);
 
     return empty;
+  }
+
+  static fromNothing() {
+    const tasks = [],
+          queue = new Queue(tasks);
+
+    return queue;
   }
 }
 
