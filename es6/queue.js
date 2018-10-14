@@ -44,9 +44,9 @@ class Queue {
 
   executeAsynchronousTask(asynchronousTask) {
     asynchronousTask.execute(() => {
-      const callback = asynchronousTask.getCallback();
+      const done = asynchronousTask.getDone();
       
-      callback.call(asynchronousTask, ...arguments);
+      done();
       
       this.next();
     });
