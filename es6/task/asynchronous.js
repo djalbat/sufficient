@@ -3,27 +3,27 @@
 const Task = require('../task');
 
 class AsynchronousTask extends Task {
-  constructor(asynchronousMethod, ...remainingArgumentsThenDone) {
+  constructor(asynchronousMethod, ...remainingArgumentsThenCallback) {
     const synchronous = false,
           method = asynchronousMethod,  ///
-          done = remainingArgumentsThenDone.pop(), ///
-          remainingArguments = remainingArgumentsThenDone;  ///
+          callback = remainingArgumentsThenCallback.pop(), ///
+          remainingArguments = remainingArgumentsThenCallback;  ///
 
     super(synchronous, method, remainingArguments);
 
-    this.done = done;
+    this.callback = callback;
   }
   
-  getDone() {
-    return this.done;
+  getCallback() {
+    return this.callback;
   }
 
-  execute(done) {
+  execute(callback) {
     const method = this.getMethod(),
           asynchronousMethod = method,  ///
           remainingArguments = this.getRemainingArguments();
 
-    asynchronousMethod.call(null, ...remainingArguments, done);
+    asynchronousMethod.call(null, ...remainingArguments, callback);
   }
 }
 
