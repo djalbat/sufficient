@@ -16,7 +16,7 @@ You can install Sufficient with [npm](https://www.npmjs.com/):
 
 You can also clone the repository with [Git](https://git-scm.com/)...
 
-    git clone https://github.com/djalbat/Sufficient.git
+    git clone https://github.com/djalbat/sufficient.git
 
 ...and then install the sufficient modules with npm from within the project's root directory:
 
