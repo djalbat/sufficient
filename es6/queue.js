@@ -11,11 +11,11 @@ class Queue {
   }
 
   addTask(task) {
+    const empty = this.isEmpty();
+
     this.tasks.push(task);
-    
-    const tasksLength = this.getTasksLength();
-    
-    if (tasksLength === 1) {
+
+    if (empty) {
       this.executeNextTask();
     }
   }
@@ -43,13 +43,15 @@ class Queue {
   }
 
   executeAsynchronousTask(asynchronousTask) {
+    const next = this.next.bind(this);
+
     asynchronousTask.execute(function() {
       const callback = asynchronousTask.getCallback();
       
       callback.apply(asynchronousTask, arguments);
       
-      this.next();
-    }.bind(this));
+      next();
+    });
   }
 
   next() {
@@ -61,15 +63,9 @@ class Queue {
       this.executeNextTask();
     }
   }
-  
-  getTasksLength() {
-    const tasksLength = this.tasks.length;
-    
-    return tasksLength;
-  }
 
   isEmpty() {
-    const tasksLength = this.getTasksLength(),
+    const tasksLength = this.tasks.length,
           empty = (tasksLength === 0);
 
     return empty;
