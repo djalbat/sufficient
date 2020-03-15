@@ -18,7 +18,7 @@ You can also clone the repository with [Git](https://git-scm.com/)...
 
     git clone https://github.com/djalbat/sufficient.git
 
-...and then install the sufficient modules with npm from within the project's root directory:
+...and then install the dependencies with npm from within the project's root directory:
 
     npm install
 
