@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const Task = require('../task');
+const Task = require("../task");
 
 class AsynchronousTask extends Task {
   constructor(asynchronousMethod, ...remainingArgumentsThenCallback) {

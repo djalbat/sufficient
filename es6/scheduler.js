@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const Queue = require('./queue');
+const Queue = require("./queue");
 
 class Scheduler {
   constructor(queue) {
