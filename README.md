@@ -25,8 +25,9 @@ You can also clone the repository with [Git](https://git-scm.com/)...
 ## Usage
 
 ```
-const sufficient = require('sufficient'),
-      { Scheduler, controller } = sufficient;
+import { Scheduler, controller } from "sufficient";
+
+...
 ```
 
 ## Compiling from source
