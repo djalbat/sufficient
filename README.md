@@ -24,7 +24,7 @@ You can also clone the repository with [Git](https://git-scm.com/)...
 
 ## Usage
 
-```js
+```
 const sufficient = require('sufficient'),
       { Scheduler, controller } = sufficient;
 ```
@@ -40,7 +40,7 @@ Automation is done with [npm scripts](https://docs.npmjs.com/misc/scripts), have
 
 The basic idea is to create the view and model and to pass these, together with a scheduler and a method to make use of them all, to the `assignMethods()` method of the `controller` singleton. Only once methods have been assigned to the controller is the view attached to the browser's DOM:  
     
-```js
+```
 const scheduler = Scheduler.fromNothing(),
       model = new Model(),
       view = <View />;
@@ -56,7 +56,7 @@ body.prepend(view);
 
 Aside from being required above, the controller should only be required, and therefore its methods only invoked, from within the view classes. Furthermore, the controller's methods should not be referenced when the JavaScript is first executed, but only in response to user events. To see why, consider the following:
 
-```js
+```
 class ResetPasswordButton extends Element {
   ...
 
@@ -70,7 +70,7 @@ class ResetPasswordButton extends Element {
 
 This will most likely not work because it is most unlikely that the `resetPassword()` method will have been attached to the `controller` object by the time this code is executed. On the other hand, the following will work:
 
-```js
+```
 class ResetPasswordButton extends Element {
   clickHandler() {
     controller.resetPassword();
@@ -92,7 +92,7 @@ Here the body of the `clickHandler()` method will only be executed in response t
 
 It is the job of controller methods to be available to the view as well as to create the tasks that manage the relationship between model and view or to carry out any other application functionality. Closure gives them access to the scheduler, the model and the view, with the aforementioned functionality typically being implemented by helper methods:
 
-```js
+```
 const sufficient = require('sufficient');
 
 const setPasswordHelper = require('./helper/setPassword'),
@@ -122,7 +122,7 @@ function createMethods(scheduler, model, view) {
 
 Alternatively, the `SynchronousTask` and `AsynchronousTask` classes can be sub-classed, with the helper methods now effectively becoming private methods that reside in the files that contain the class definitions: 
 
-```js
+```
 const SetPasswordAsynchronousTask = require('./task/asynchronous/setPassword'),
       ResetPasswordSynchronousTask = require('./task/synchronous/resetPassword');
 
@@ -148,7 +148,7 @@ function createMethods(scheduler, model, view) {
 
 The task class definitions are as follows:
 
-```js
+```
 const sufficient = require('sufficient');
 
 const { AsynchronousTask } = sufficient;
@@ -168,7 +168,7 @@ function setPassword(model, view, done) {
 }
 ```
 
-```js
+```
 const sufficient = require('sufficient');
 
 const { SynchronousTask } = sufficient;

@@ -1,8 +1,8 @@
 "use strict";
 
-const Task = require("../task");
+import Task from "../task";
 
-class AsynchronousTask extends Task {
+export default class AsynchronousTask extends Task {
   constructor(asynchronousMethod, ...remainingArgumentsThenCallback) {
     const synchronous = false,
           method = asynchronousMethod,  ///
@@ -26,5 +26,3 @@ class AsynchronousTask extends Task {
     asynchronousMethod.call(null, ...remainingArguments, callback);
   }
 }
-
-module.exports = AsynchronousTask;

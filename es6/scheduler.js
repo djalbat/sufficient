@@ -1,8 +1,8 @@
 "use strict";
 
-const Queue = require("./queue");
+import Queue from "./queue";
 
-class Scheduler {
+export default class Scheduler {
   constructor(queue) {
     this.queue = queue;
   }
@@ -29,5 +29,3 @@ class Scheduler {
     return scheduler;
   }
 }
-
-module.exports = Scheduler;

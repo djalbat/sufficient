@@ -1,6 +1,6 @@
 "use strict";
 
-class Task {
+export default class Task {
   constructor(synchronous, method, remainingArguments) {
     this.synchronous = synchronous;    
     this.method = method;
@@ -19,5 +19,3 @@ class Task {
     return this.remainingArguments;
   }
 }
-
-module.exports = Task;

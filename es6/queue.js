@@ -1,11 +1,10 @@
 "use strict";
 
-const necessary = require("necessary");
+import { arrayUtilities } from "necessary";
 
-const { arrayUtilities } = necessary,
-      { first } = arrayUtilities;
+const { first } = arrayUtilities;
 
-class Queue {
+export default class Queue {
   constructor(tasks) {
     this.tasks = tasks;
   }
@@ -78,5 +77,3 @@ class Queue {
     return queue;
   }
 }
-
-module.exports = Queue;
