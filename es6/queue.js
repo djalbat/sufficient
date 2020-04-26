@@ -23,16 +23,18 @@ export default class Queue {
     const firstTask = first(this.tasks),
           nextTask = firstTask, ///
           nextTaskSynchronous = nextTask.isSynchronous();
-    
-    if (nextTaskSynchronous) { ///
-      const synchronousTask = nextTask;  ///
 
-      this.executeSynchronousTask(synchronousTask);
-    } else {
-      const asynchronousTask = nextTask;  ///
+    setTimeout(() => {
+      if (nextTaskSynchronous) { ///
+        const synchronousTask = nextTask;  ///
 
-      this.executeAsynchronousTask(asynchronousTask);
-    }
+        this.executeSynchronousTask(synchronousTask);
+      } else {
+        const asynchronousTask = nextTask;  ///
+
+        this.executeAsynchronousTask(asynchronousTask);
+      }
+    }, 0 );
   }
 
   executeSynchronousTask(synchronousTask) {
