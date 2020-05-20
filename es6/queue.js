@@ -34,7 +34,7 @@ export default class Queue {
 
         this.executeAsynchronousTask(asynchronousTask);
       }
-    }, 0 );
+    }, 0);
   }
 
   executeSynchronousTask(synchronousTask) {
