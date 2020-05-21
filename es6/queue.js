@@ -46,7 +46,7 @@ export default class Queue {
   executeAsynchronousTask(asynchronousTask) {
     const next = this.next.bind(this);
 
-    asynchronousTask.execute(function() {
+    asynchronousTask.execute(function() { ///
       const callback = asynchronousTask.getCallback();
       
       callback.apply(asynchronousTask, arguments);
