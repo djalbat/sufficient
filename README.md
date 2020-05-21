@@ -94,12 +94,10 @@ Here the body of the `clickHandler()` method will only be executed in response t
 It is the job of controller methods to be available to the view as well as to create the tasks that manage the relationship between model and view or to carry out any other application functionality. Closure gives them access to the scheduler, the model and the view, with the aforementioned functionality typically being implemented by helper methods:
 
 ```
-const sufficient = require('sufficient');
+import { SynchronousTask, AsynchronousTask } from "sufficient";
 
-const setPasswordHelper = require('./helper/setPassword'),
-      resetPasswordHelper = require('./helper/resetPassword');
-
-const { SynchronousTask, AsynchronousTask } = sufficient;
+import setPasswordHelper from "./helper/setPassword";
+import resetPasswordHelper from "./helper/resetPassword";
 
 function createMethods(scheduler, model, view) {
   function setPassword(password) {
@@ -124,8 +122,8 @@ function createMethods(scheduler, model, view) {
 Alternatively, the `SynchronousTask` and `AsynchronousTask` classes can be sub-classed, with the helper methods now effectively becoming private methods that reside in the files that contain the class definitions: 
 
 ```
-const SetPasswordAsynchronousTask = require('./task/asynchronous/setPassword'),
-      ResetPasswordSynchronousTask = require('./task/synchronous/resetPassword');
+import SetPasswordAsynchronousTask from "./task/asynchronous/setPassword";
+import ResetPasswordSynchronousTask from "./task/synchronous/resetPassword";
 
 function createMethods(scheduler, model, view) {
   function setPassword(password) {
@@ -150,17 +148,13 @@ function createMethods(scheduler, model, view) {
 The task class definitions are as follows:
 
 ```
-const sufficient = require('sufficient');
+import sufficient from "sufficient";
 
-const { AsynchronousTask } = sufficient;
-
-class SetPasswordAsynchronousTask extends AsynchronousTask {
+export default class SetPasswordAsynchronousTask extends AsynchronousTask {
   constructor(model, view, done) {
     super(setPassword, model, view, done);
   }
 }
-
-module.exports = SetPasswordAsynchronousTask;
 
 function setPassword(model, view, done) {
     ...
@@ -170,17 +164,13 @@ function setPassword(model, view, done) {
 ```
 
 ```
-const sufficient = require('sufficient');
+import { SynchronousTask } from "sufficient";
 
-const { SynchronousTask } = sufficient;
-
-class ResetPasswordSynchronousTask extends SynchronousTask {
+export default class ResetPasswordSynchronousTask extends SynchronousTask {
   constructor(model, view) {
     super(resetPassword, model, view);
   }
 }
-
-module.exports = ResetPasswordSynchronousTask;
 
 function resetPassword(model, view) {
     ....
