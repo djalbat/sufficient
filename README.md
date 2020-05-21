@@ -61,7 +61,7 @@ Aside from being required above, the controller should only be required, and the
 class ResetPasswordButton extends Element {
   ...
 
-  initialise() {
+  initialise(properties) {
     this.onClick(controller.resetPassword);
   }
 
@@ -79,7 +79,7 @@ class ResetPasswordButton extends Element {
   
   ...
 
-  initialise() {
+  initialise(properties) {
     this.onClick(this.clickHandler);
   }
   
