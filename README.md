@@ -24,27 +24,18 @@ You can also clone the repository with [Git](https://git-scm.com/)...
 
 ## Usage
 
-```
-import { Scheduler, controller } from "sufficient";
-
-...
-```
-
-## Compiling from source
-
-Automation is done with [npm scripts](https://docs.npmjs.com/misc/scripts), have a look at the `package.json` file. The pertinent commands are:
-
-    npm run build-debug
-    npm run watch-debug
-    
-## Main application architecture
-
 The basic idea is to create the view and model and to pass these, together with a scheduler and a method to make use of them all, to the `assignMethods()` method of the `controller` singleton. Only once methods have been assigned to the controller is the view attached to the browser's DOM:  
     
 ```
+import { Scheduler, controller } from "sufficient";
+
 const scheduler = Scheduler.fromNothing(),
       model = new Model(),
-      view = <View />;
+      view =
+
+        <View />
+
+     ;
 
 controller.assignMethods(createMethods, scheduler, model, view);
 
@@ -53,7 +44,7 @@ const body = new Body();
 body.prepend(view);
 ```
     
-## Invoking controller methods
+### Invoking controller methods
 
 Aside from being required above, the controller should only be required, and therefore its methods only invoked, from within the view classes. Furthermore, the controller's methods should not be referenced when the JavaScript is first executed, but only in response to user events. To see why, consider the following:
 
@@ -89,7 +80,7 @@ class ResetPasswordButton extends Element {
 
 Here the body of the `clickHandler()` method will only be executed in response to user interaction and this can only happen once the view has been attached to the DOM. And, in turn, this happens only after all of the requisite methods have been attached to the `controller` object.
 
-## Creating tasks
+### Creating tasks
 
 It is the job of controller methods to be available to the view as well as to create the tasks that manage the relationship between model and view or to carry out any other application functionality. Closure gives them access to the scheduler, the model and the view, with the aforementioned functionality typically being implemented by helper methods:
 
@@ -180,6 +171,13 @@ function resetPassword(model, view) {
 In the case of asynchronous tasks the scheduler will pass its own intermediate callback to the corresponding method in order to give itself the opportunity to remove the task from its queue. It will then invoke the given callback method, which must be the last argument passed to the constructor, passing on the arguments. In the synchronous case, tasks are removed from the queue immediately after their corresponding methods have been invoked.
 
 The tasks and scheduler are also agnostic to the method arguments. In the above examples the references to the model and view have been utilised but any number of arguments can be passed to the task constructors. A look at the [SynchronousTask](https://github.com/djalbat/Sufficient/blob/master/es6/task/synchronous.js) and [AsynchronousTask](https://github.com/djalbat/Sufficient/blob/master/es6/task/asynchronous.js) classes should convince.
+
+## Compiling from source
+
+Automation is done with [npm scripts](https://docs.npmjs.com/misc/scripts), have a look at the `package.json` file. The pertinent commands are:
+
+    npm run build-debug
+    npm run watch-debug
 
 ## Contact
 
