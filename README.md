@@ -41,7 +41,7 @@ controller.assignMethods(createMethods, scheduler, model, view);
 
 const body = new Body();
 
-body.prepend(view);
+body.mount(view);
 ```
     
 ### Invoking controller methods
