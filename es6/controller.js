@@ -1,13 +1,15 @@
 "use strict";
 
-class Controller {
-  assignMethods(createMethods, scheduler, model, view, ...remainingArguments) {
-    const methods = createMethods(scheduler, model, view, ...remainingArguments);
+const controller = {};
 
-    Object.assign(this, methods);
-  }
+function assignMethods(createMethods, scheduler, model, view, ...remainingArguments) {
+  const methods = createMethods(scheduler, model, view, ...remainingArguments);
+
+  Object.assign(controller, methods);
 }
 
-const controller = new Controller();
+Object.assign(controller, {
+  assignMethods
+});
 
 export default controller;
