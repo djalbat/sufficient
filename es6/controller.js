@@ -1,6 +1,16 @@
 "use strict";
 
-const controller = {};
+let controller;
+
+({ controller } = window);  ///
+
+if (controller === undefined) {
+  controller = {};
+}
+
+Object.assign(window, {
+  controller
+});
 
 function assignMethods(createMethods, scheduler, model, view, ...remainingArguments) {
   const methods = createMethods(scheduler, model, view, ...remainingArguments);
