@@ -104,8 +104,8 @@ function createMethods(scheduler, model, view) {
   }
 
   return ({
-    setPassword: setPassword,
-    resetPassword: resetPassword
+    setPassword,
+    resetPassword
   });
 }
 ```
@@ -130,8 +130,8 @@ function createMethods(scheduler, model, view) {
   }
 
   return ({
-    setPassword: setPassword,
-    resetPassword: resetPassword
+    setPassword,
+    resetPassword
   });
 }
 ```
