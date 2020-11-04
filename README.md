@@ -92,7 +92,8 @@ import resetPasswordHelper from "./helper/resetPassword";
 
 function createMethods(scheduler, model, view) {
   function setPassword(password) {
-    const setPasswordAsynchronousTask = new AsynchronousTask(setPasswordHelper, model, view, done);
+    const done = () => {},  ///
+          setPasswordAsynchronousTask = new AsynchronousTask(setPasswordHelper, model, view, done));
 
     scheduler.addTaskToQueue(setPasswordAsynchronousTask);
   }
@@ -109,6 +110,8 @@ function createMethods(scheduler, model, view) {
   });
 }
 ```
+
+Note here that the `done()` method is vacuous. The `AsynchronousTask` class constructor expects the last of its arguments to be a callback and will invoke it, therefore such a method must be passed. Alternatively, a `done` argument could have been included in the `setPassword(...)` method's arguments and simply passed on. Here the assumption is that this method is invoked by way of the user interface, however, which requires no notification via a callback that the task has been successfully executed.
 
 Alternatively, the `SynchronousTask` and `AsynchronousTask` classes can be sub-classed, with the helper methods now effectively becoming private methods that reside in the files that contain the class definitions: 
 
