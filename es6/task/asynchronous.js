@@ -3,11 +3,10 @@
 import Task from "../task";
 
 export default class AsynchronousTask extends Task {
-  constructor(asynchronousMethod, ...remainingArgumentsThenCallback) {
+  constructor(asynchronousMethod, ...remainingArguments) {
     const synchronous = false,
           method = asynchronousMethod,  ///
-          callback = remainingArgumentsThenCallback.pop(), ///
-          remainingArguments = remainingArgumentsThenCallback;  ///
+          callback = remainingArguments.pop(); ///
 
     super(synchronous, method, remainingArguments);
 
