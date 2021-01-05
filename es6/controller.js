@@ -1,20 +1,10 @@
 "use strict";
 
-let controller;
-
-if (typeof window === "undefined") {
-  controller = {}
-} else {
-  ({ controller } = window);  ///
-
-  if (controller === undefined) {
-    controller = {};
-  }
-
-  Object.assign(window, {
-    controller
-  });
+if (!globalThis.controller) {
+  globalThis.controller = {};
 }
+
+const { controller } = globalThis;
 
 function assignMethods(createMethods, scheduler, model, view, ...remainingArguments) {
   const methods = createMethods(scheduler, model, view, ...remainingArguments);
