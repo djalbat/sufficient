@@ -15,22 +15,21 @@ export default class Queue {
     this.tasks.push(task);
 
     if (empty) {
-      this.executeNextTask();
+      this.executeFirstTask();
     }
   }
 
-  executeNextTask() {
+  executeFirstTask() {
     const firstTask = first(this.tasks),
-          nextTask = firstTask, ///
-          nextTaskSynchronous = nextTask.isSynchronous();
+          firstTaskSynchronous = firstTask.isSynchronous();
 
     setTimeout(() => {
-      if (nextTaskSynchronous) { ///
-        const synchronousTask = nextTask;  ///
+      if (firstTaskSynchronous) { ///
+        const synchronousTask = firstTask;  ///
 
         this.executeSynchronousTask(synchronousTask);
       } else {
-        const asynchronousTask = nextTask;  ///
+        const asynchronousTask = firstTask;  ///
 
         this.executeAsynchronousTask(asynchronousTask);
       }
@@ -61,7 +60,7 @@ export default class Queue {
     const empty = this.isEmpty();
 
     if (!empty) {
-      this.executeNextTask();
+      this.executeFirstTask();
     }
   }
 
