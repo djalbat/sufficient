@@ -15,6 +15,6 @@ export default class SynchronousTask extends Task {
           synchronousMethod = method, ///
           remainingArguments = this.getRemainingArguments();
 
-    synchronousMethod.call(null, ...remainingArguments);
+    synchronousMethod.call(this, ...remainingArguments);
   }
 }

@@ -35,7 +35,7 @@ const scheduler = Scheduler.fromNothing(),
 
         <View />
 
-     ;
+      ;
 
 controller.assignMethods(createMethods, scheduler, model, view);
 
@@ -53,7 +53,7 @@ class ResetPasswordButton extends Element {
   ...
 
   initialise(properties) {
-    this.onClick(controller.resetPassword);
+    this.onClick((event, element) => controller.resetPassword);
   }
 
   ...
@@ -64,7 +64,7 @@ This will most likely not work because it is most unlikely that the `resetPasswo
 
 ```
 class ResetPasswordButton extends Element {
-  clickHandler() {
+  clickHandler(event, element) {
     controller.resetPassword();
   }
   

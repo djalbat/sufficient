@@ -22,6 +22,6 @@ export default class AsynchronousTask extends Task {
           asynchronousMethod = method,  ///
           remainingArguments = this.getRemainingArguments();
 
-    asynchronousMethod.call(null, ...remainingArguments, callback);
+    asynchronousMethod.call(this, ...remainingArguments, callback);
   }
 }
