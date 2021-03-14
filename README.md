@@ -24,7 +24,7 @@ You can also clone the repository with [Git](https://git-scm.com/)...
 
 ## Usage
 
-The basic idea is to create the view and model and to pass these, together with a scheduler and a method to make use of them all, to the `assignMethods()` method of the `controller` singleton. Only once methods have been assigned to the controller is the view attached to the browser's DOM:  
+The basic idea is to create a view and a model and to pass these, together with a scheduler and a method to make use of them all, to the `assignMethods()` method of the `controller` singleton. Only once these methods have been assigned to the controller is the view attached to the browser's DOM:
     
 ```
 import { Scheduler, controller } from "sufficient";
@@ -46,7 +46,7 @@ body.mount(view);
     
 ### Invoking controller methods
 
-Aside from being required above, the controller should normally only be required, and therefore its methods only invoked, from within the view classes. Furthermore, the controller's methods should be invoked only in response to user events. Typically:
+Aside from being imported above, the controller should normally only be imported, and therefore its methods only invoked, from within the view classes. Furthermore, these methods should be invoked only in response to user events. Typically:
 
 ```
 class ResetPasswordButton extends Element {
@@ -68,102 +68,52 @@ class ResetPasswordButton extends Element {
 }
 ```
 
-Here the `clickHandler()` method will only be invoked in response to user interaction and this can only happen once the view has been attached to the DOM. And, in turn, this happens only after all of the requisite methods have previously been attached to the `controller` object.
+Here the `clickHandler()` method will only be invoked in response to user interaction and this can only happen once the view has been attached to the DOM. And, in turn, this happens only after all of the requisite methods have been attached to the `controller` object.
 
 ### Creating tasks
 
 It is the job of controller methods to be available to the view as well as to create the tasks that manage the relationship between model and view or to carry out any other application functionality. Closure gives them access to the scheduler, the model and the view, with the aforementioned functionality typically being implemented by helper methods:
 
 ```
-import { SynchronousTask, AsynchronousTask } from "sufficient";
+import { Task } from "sufficient";
 
 import setPasswordHelper from "./helper/setPassword";
-import resetPasswordHelper from "./helper/resetPassword";
 
 function createMethods(scheduler, model, view) {
   function setPassword(password) {
     const done = () => {},  ///
-          setPasswordAsynchronousTask = new AsynchronousTask(setPasswordHelper, model, view, done);
+          setPasswordTask = new Task(setPasswordHelper, model, view, done);
 
-    scheduler.addTaskToQueue(setPasswordAsynchronousTask);
-  }
-
-  function resetPassword() {
-    const resetPasswordSynchronousTask = new SynchronousTask(resetPasswordHelper, model, view);
-
-    scheduler.addTaskToQueue(resetPasswordSynchronousTask);
+    scheduler.addTaskToQueue(setPasswordTask);
   }
 
   return ({
-    setPassword,
     resetPassword
   });
 }
 ```
 
-Note here that the `done()` method is vacuous. The `AsynchronousTask` class constructor expects the last of its arguments to be a callback and will invoke it, therefore such a method must be passed. Alternatively, a `done` argument could have been included in the `setPassword(...)` method's arguments and simply passed on. Here the assumption is that this method is invoked by way of the user interface, however, which requires no notification via a callback that the task has been successfully executed.
-
-Alternatively, the `SynchronousTask` and `AsynchronousTask` classes can be sub-classed, with the helper methods now effectively becoming private methods that reside in the files that contain the class definitions: 
+Note here that the `done()` method is vacuous. The `Task` class constructor expects the last of its arguments to be a callback and will invoke it, therefore such a method must be passed. Alternatively, a `done` argument could have been included in the `setPassword(...)` method's arguments and simply passed on. Here the assumption is that this method is invoked by way of the user interface, however, which requires no notification via a callback that the task has been successfully executed.
 
 ```
-import SetPasswordAsynchronousTask from "./task/asynchronous/setPassword";
-import ResetPasswordSynchronousTask from "./task/synchronous/resetPassword";
+import SetPasswordTask from "./task/setPassword";
 
 function createMethods(scheduler, model, view) {
   function setPassword(password) {
-    const setPasswordAsynchronousTask = new SetPasswordAsynchronousTask(model, view, done);
+    const setPasswordTask = new SetPasswordTask(model, view, done);
 
-    scheduler.addTaskToQueue(setPasswordAsynchronousTask);
-  }
-
-  function resetPassword() {
-    const resetPasswordSynchronousTask = ResetPasswordSynchronousTask(model, view);
-
-    scheduler.addTaskToQueue(resetPasswordSynchronousTask);
+    scheduler.addTaskToQueue(setPasswordTask);
   }
 
   return ({
-    setPassword,
-    resetPassword
+    setPassword
   });
 }
 ```
 
-The task class definitions are as follows:
+The scheduler will pass its own intermediate callback to the corresponding method in order to give itself the opportunity to remove the task from its queue. It will then invoke the given callback method, which must be the last argument passed to the constructor, passing on the arguments. In the synchronous case, tasks are removed from the queue immediately after their corresponding methods have been invoked.
 
-```
-import { AsynchronousTask } from "sufficient";
-
-export default class SetPasswordAsynchronousTask extends AsynchronousTask {
-  constructor(model, view, done) {
-    super(setPassword, model, view, done);
-  }
-}
-
-function setPassword(model, view, done) {
-    ...
-    
-    done();
-}
-```
-
-```
-import { SynchronousTask } from "sufficient";
-
-export default class ResetPasswordSynchronousTask extends SynchronousTask {
-  constructor(model, view) {
-    super(resetPassword, model, view);
-  }
-}
-
-function resetPassword(model, view) {
-    ....
-}
-```
-
-In the case of asynchronous tasks the scheduler will pass its own intermediate callback to the corresponding method in order to give itself the opportunity to remove the task from its queue. It will then invoke the given callback method, which must be the last argument passed to the constructor, passing on the arguments. In the synchronous case, tasks are removed from the queue immediately after their corresponding methods have been invoked.
-
-The tasks and scheduler are also agnostic to the method arguments. In the above examples the references to the model and view have been utilised but any number of arguments can be passed to the task constructors. A look at the [SynchronousTask](https://github.com/djalbat/Sufficient/blob/master/es6/task/synchronous.js) and [AsynchronousTask](https://github.com/djalbat/Sufficient/blob/master/es6/task/asynchronous.js) classes should convince.
+The tasks and scheduler are also agnostic to the method arguments. In the above examples the references to the model and view have been utilised but any number of arguments can be passed to the task constructor. A look at the [Task](https://github.com/djalbat/Sufficient/blob/master/es6/task).
 
 ## Building
 
