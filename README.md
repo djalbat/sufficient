@@ -113,7 +113,7 @@ function createMethods(scheduler, model, view) {
 }
 ```
 
-The tasks and scheduler are agnostic to method arguments. In the above examples the references to the model and view have been utilised but any number of arguments can be passed to the task constructor. A look at the [Task](https://github.com/djalbat/Sufficient/blob/master/src/task) source should convince.
+The tasks and scheduler are agnostic to method arguments. In the above examples the references to the model and view have been utilised but any number of arguments can be passed to the task constructor. A look at the [implementation](https://github.com/djalbat/sufficient/blob/master/src/task.js) of the Task class gashould convince.
 
 ## Building
 
