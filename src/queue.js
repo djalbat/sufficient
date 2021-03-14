@@ -20,35 +20,22 @@ export default class Queue {
   }
 
   executeFirstTask() {
-    const firstTask = first(this.tasks),
-          firstTaskSynchronous = firstTask.isSynchronous();
+    const firstTask = first(this.tasks);
 
     setTimeout(() => {
-      if (firstTaskSynchronous) { ///
-        const synchronousTask = firstTask;  ///
+      const task = firstTask;  ///
 
-        this.executeSynchronousTask(synchronousTask);
-      } else {
-        const asynchronousTask = firstTask;  ///
-
-        this.executeAsynchronousTask(asynchronousTask);
-      }
+      this.executeTask(task);
     }, 0);
   }
 
-  executeSynchronousTask(synchronousTask) {
-    synchronousTask.execute();
-
-    this.next();
-  }
-
-  executeAsynchronousTask(asynchronousTask) {
+  executeTask(task) {
     const next = this.next.bind(this);
 
-    asynchronousTask.execute(function() { ///
-      const callback = asynchronousTask.getCallback();
+    task.execute(function() { ///
+      const callback = task.getCallback();
       
-      callback.apply(asynchronousTask, arguments);
+      callback.apply(task, arguments);
       
       next();
     });

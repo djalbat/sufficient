@@ -2,11 +2,11 @@
 
 An MVC framework with scheduling.
 
-This framework came into being as a result of [Juxtapose](https://github.com/djalbat/Juxtapose), which provides the means to create an application's view. The corresponding model will always be bespoke, so to speak, so there are no means to create it either here or in Juxtapose. That leaves the controller, which is implemented here. The reason that Sufficient is called an MVC framework is that the more or less prescriptive guidelines for putting an application together using these approaches are spelled out in what follows.
+This framework came into being as a result of [Juxtapose](https://github.com/djalbat/Juxtapose), which provides the means to create an application's view. The corresponding model will always be bespoke, so there are no means to create it either here or in Juxtapose. That leaves the controller, which is implemented here. The reason that Sufficient is called an MVC framework is that the more or less prescriptive guidelines for putting an application together using these approaches are spelled out in what follows.
  
-To gain an idea of how to put an application together using Sufficient and Juxtapose, it is a very good idea to watch the last few videos in the [The Joy of JSX](https://vimeo.com/album/4562013) series that went with Juxtapose, especially the last video, [10 Traditional MVC](https://vimeo.com/album/4562013/video/227405572). This video describes an MVC example application which you should probably get up and running yourself. Its [controller](https://github.com/djalbat/Juxtapose/blob/master/es6/examples/mvcApp/controller.js) is pretty much identical to the one here, in fact, aside from the lack of a reference to a scheduler. In what follows it is tacitly assumed that you have more than a passing familiarity with this material.
+To gain an idea of how to put an application together using Sufficient and Juxtapose, it is a very good idea to watch the last few videos in the [The Joy of JSX](https://vimeo.com/album/4562013) series that went with Juxtapose, especially the last video, [10 Traditional MVC](https://vimeo.com/album/4562013/video/227405572). This video describes an MVC example application which you should probably get up and running yourself. Its [controller](https://github.com/djalbat/Juxtapose/blob/master/es6/examples/mvcApp/controller.js) is pretty much identical to the one here, in fact, aside from the lack of a reference to a scheduler. In what follows it is tacitly assumed that you have at least a passing familiarity with this material.
 
-In summary, all that is to be found here is a [scheduler](https://github.com/djalbat/Sufficient/blob/master/es6/scheduler.js) and a modified [controller](https://github.com/djalbat/Sufficient/blob/master/es6/controller.js), together with prescriptions which you should follow in order to put it all together. The scheduler will be needed if you want to write an application that encompasses asynchronous behaviour such as accessing the file system, or has concurrent functionality.
+In summary, all that is to be found here is a [scheduler](https://github.com/djalbat/Sufficient/blob/master/es6/scheduler.js) and a modified [controller](https://github.com/djalbat/Sufficient/blob/master/es6/controller.js), together with prescriptions which you should follow in order to make use of them. The scheduler will be needed if you want to write an application that encompasses asynchronous behaviour such as accessing the file system, or has concurrent functionality.
 
 ## Installation
 
@@ -46,39 +46,29 @@ body.mount(view);
     
 ### Invoking controller methods
 
-Aside from being required above, the controller should only be required, and therefore its methods only invoked, from within the view classes. Furthermore, the controller's methods should not be referenced when the JavaScript is first executed, but only in response to user events. To see why, consider the following:
-
-```
-class ResetPasswordButton extends Element {
-  ...
-
-  initialise(properties) {
-    this.onClick((event, element) => controller.resetPassword);
-  }
-
-  ...
-}
-```
-
-This will most likely not work because it is most unlikely that the `resetPassword()` method will have been attached to the `controller` object by the time this code is executed. On the other hand, the following will work:
+Aside from being required above, the controller should normally only be required, and therefore its methods only invoked, from within the view classes. Furthermore, the controller's methods should be invoked only in response to user events. Typically:
 
 ```
 class ResetPasswordButton extends Element {
   clickHandler(event, element) {
     controller.resetPassword();
   }
-  
+
   ...
 
-  initialise(properties) {
-    this.onClick(this.clickHandler);
+  didMount() {
+    this.onClick(this.clickHandler, this);
   }
-  
+
+  willUnmount() {
+    this.offClick(this.clickHandler, this);
+  }
+
   ...
 }
 ```
 
-Here the body of the `clickHandler()` method will only be executed in response to user interaction and this can only happen once the view has been attached to the DOM. And, in turn, this happens only after all of the requisite methods have been attached to the `controller` object.
+Here the `clickHandler()` method will only be invoked in response to user interaction and this can only happen once the view has been attached to the DOM. And, in turn, this happens only after all of the requisite methods have previously been attached to the `controller` object.
 
 ### Creating tasks
 
@@ -93,7 +83,7 @@ import resetPasswordHelper from "./helper/resetPassword";
 function createMethods(scheduler, model, view) {
   function setPassword(password) {
     const done = () => {},  ///
-          setPasswordAsynchronousTask = new AsynchronousTask(setPasswordHelper, model, view, done));
+          setPasswordAsynchronousTask = new AsynchronousTask(setPasswordHelper, model, view, done);
 
     scheduler.addTaskToQueue(setPasswordAsynchronousTask);
   }
@@ -142,7 +132,7 @@ function createMethods(scheduler, model, view) {
 The task class definitions are as follows:
 
 ```
-import sufficient from "sufficient";
+import { AsynchronousTask } from "sufficient";
 
 export default class SetPasswordAsynchronousTask extends AsynchronousTask {
   constructor(model, view, done) {
