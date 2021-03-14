@@ -93,7 +93,7 @@ function createMethods(scheduler, model, view) {
 }
 ```
 
-Note here that the `done()` method is vacuous. The `Task` class constructor expects the last of its arguments to be a callback and will invoke it, therefore such a method must be passed. Alternatively, a `done` argument could have been included in the `setPassword(...)` method's arguments and simply passed on. Here the assumption is that the caller requires no notification via a callback that the task has been executed.
+Note the vacuous `done()` callback. The `Task` class constructor expects the last of its arguments to be a callback and will invoke it once the task has been executed, therefore such a method must be passed. Alternatively, a `done` argument could have been included in the `setPassword(...)` method's arguments and simply passed on. Here the assumption is that the caller requires no notification via a callback that the task has been executed.
 
 Now the `createMethods()` function can export a `setPassword()` function that instantiates the requisite task and schedules it:
 
@@ -113,7 +113,7 @@ function createMethods(scheduler, model, view) {
 }
 ```
 
-The tasks and scheduler are agnostic to method arguments. In the above examples the references to the model and view have been utilised but any number of arguments can be passed to the task constructor. A look at the [Task](https://github.com/djalbat/Sufficient/blob/master/es6/task) source should convince.
+The tasks and scheduler are agnostic to method arguments. In the above examples the references to the model and view have been utilised but any number of arguments can be passed to the task constructor. A look at the [Task](https://github.com/djalbat/Sufficient/blob/master/src/task) source should convince.
 
 ## Building
 
