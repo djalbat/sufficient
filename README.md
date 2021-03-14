@@ -24,7 +24,7 @@ You can also clone the repository with [Git](https://git-scm.com/)...
 
 ## Usage
 
-The basic idea is to create a view and a model and to pass these, together with a scheduler and a method to make use of them all, to the `assignMethods()` method of the `controller` singleton. Only once these methods have been assigned to the controller is the view attached to the browser's DOM:
+The basic idea is to create a view and a model and to pass these, together with a scheduler and a `createMethods()` function to make use of them all, to the `assignMethods()` method of the `controller` singleton. Only once these methods have been assigned to the controller is the view attached to the browser's DOM:
     
 ```
 import { Scheduler, controller } from "sufficient";
@@ -46,7 +46,7 @@ body.mount(view);
     
 ### Invoking controller methods
 
-Aside from being imported above, the controller should normally only be imported, and therefore its methods only invoked, from within the view classes. Furthermore, these methods should be invoked only in response to user events. Typically:
+Aside from being imported above, the controller should normally only be imported, and therefore its methods only invoked, from within the view classes. Furthermore, its methods should be invoked only in response to user events. Typically:
 
 ```
 class ResetPasswordButton extends Element {
@@ -68,7 +68,7 @@ class ResetPasswordButton extends Element {
 }
 ```
 
-Here the `clickHandler()` method will only be invoked in response to user interaction and this can only happen once the view has been attached to the DOM. And, in turn, this happens only after all of the requisite methods have been attached to the `controller` object.
+Here the `clickHandler()` method will only be invoked in response to user interaction and this can only happen once the view has been attached to the DOM. And, in turn, this happens only after all of the requisite methods have been attached to the `controller` object as described above.
 
 ### Creating tasks
 
@@ -93,7 +93,9 @@ function createMethods(scheduler, model, view) {
 }
 ```
 
-Note here that the `done()` method is vacuous. The `Task` class constructor expects the last of its arguments to be a callback and will invoke it, therefore such a method must be passed. Alternatively, a `done` argument could have been included in the `setPassword(...)` method's arguments and simply passed on. Here the assumption is that this method is invoked by way of the user interface, however, which requires no notification via a callback that the task has been successfully executed.
+Note here that the `done()` method is vacuous. The `Task` class constructor expects the last of its arguments to be a callback and will invoke it, therefore such a method must be passed. Alternatively, a `done` argument could have been included in the `setPassword(...)` method's arguments and simply passed on. Here the assumption is that the caller requires no notification via a callback that the task has been executed.
+
+Now the `createMethods()` function can export a `setPassword()` function that instantiates the requisite task and schedules it:
 
 ```
 import SetPasswordTask from "./task/setPassword";
@@ -111,9 +113,7 @@ function createMethods(scheduler, model, view) {
 }
 ```
 
-The scheduler will pass its own intermediate callback to the corresponding method in order to give itself the opportunity to remove the task from its queue. It will then invoke the given callback method, which must be the last argument passed to the constructor, passing on the arguments. In the synchronous case, tasks are removed from the queue immediately after their corresponding methods have been invoked.
-
-The tasks and scheduler are also agnostic to the method arguments. In the above examples the references to the model and view have been utilised but any number of arguments can be passed to the task constructor. A look at the [Task](https://github.com/djalbat/Sufficient/blob/master/es6/task).
+The tasks and scheduler are agnostic to method arguments. In the above examples the references to the model and view have been utilised but any number of arguments can be passed to the task constructor. A look at the [Task](https://github.com/djalbat/Sufficient/blob/master/es6/task) source should convince.
 
 ## Building
 
