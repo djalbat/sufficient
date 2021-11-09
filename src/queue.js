@@ -4,8 +4,6 @@ import { arrayUtilities } from "necessary";
 
 const { first } = arrayUtilities;
 
-const defer = setTimeout(func, 0);
-
 export default class Queue {
   constructor(tasks, deferred) {
     this.tasks = tasks;
@@ -83,4 +81,8 @@ export default class Queue {
 
     return queue;
   }
+}
+
+function defer(func) {
+  setTimeout(func, 0);
 }
