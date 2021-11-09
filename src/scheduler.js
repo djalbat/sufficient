@@ -28,4 +28,11 @@ export default class Scheduler {
 
     return scheduler;
   }
+
+  static fromDeferred(deferred) {
+    const queue = Queue.fromDeferred(deferred),
+          scheduler = new Scheduler(queue);
+
+    return scheduler;
+  }
 }

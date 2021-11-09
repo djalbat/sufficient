@@ -4,9 +4,12 @@ import { arrayUtilities } from "necessary";
 
 const { first } = arrayUtilities;
 
+const defer = setTimeout(func, 0);
+
 export default class Queue {
-  constructor(tasks) {
+  constructor(tasks, deferred) {
     this.tasks = tasks;
+    this.deferred = deferred;
   }
 
   addTask(task) {
@@ -22,11 +25,19 @@ export default class Queue {
   executeFirstTask() {
     const firstTask = first(this.tasks);
 
-    setTimeout(() => {
-      const task = firstTask;  ///
+    if (this.deferred) {
+      defer(() => {
+        const task = firstTask;  ///
 
-      this.executeTask(task);
-    }, 0);
+        this.executeTask(task);
+      });
+
+      return;
+    }
+
+    const task = firstTask;  ///
+
+    this.executeTask(task);
   }
 
   executeTask(task) {
@@ -60,7 +71,15 @@ export default class Queue {
 
   static fromNothing() {
     const tasks = [],
-          queue = new Queue(tasks);
+          deferred = true,
+          queue = new Queue(tasks, deferred);
+
+    return queue;
+  }
+
+  static fromDeferred(deferred) {
+    const tasks = [],
+          queue = new Queue(tasks, deferred);
 
     return queue;
   }
