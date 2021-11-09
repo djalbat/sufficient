@@ -7,6 +7,12 @@ export default class Scheduler {
     this.queue = queue;
   }
 
+  getQueue() {
+    return this.queue;
+  }
+
+  setDeferred(deferred) { this.queue.setDeferred(deferred); }
+
   addTaskToQueue(task) {
     this.queue.addTask(task);
   }
@@ -24,13 +30,6 @@ export default class Scheduler {
 
   static fromNothing() {
     const queue = Queue.fromNothing(),
-          scheduler = new Scheduler(queue);
-
-    return scheduler;
-  }
-
-  static fromDeferred(deferred) {
-    const queue = Queue.fromDeferred(deferred),
           scheduler = new Scheduler(queue);
 
     return scheduler;

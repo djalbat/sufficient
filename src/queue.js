@@ -10,6 +10,18 @@ export default class Queue {
     this.deferred = deferred;
   }
 
+  getTasks() {
+    return tasks;
+  }
+
+  isDeferred() {
+    return this.deferred;
+  }
+
+  setDeferred(deferred) {
+    this.deferred = deferred;
+  }
+
   addTask(task) {
     const empty = this.isEmpty();
 
@@ -70,13 +82,6 @@ export default class Queue {
   static fromNothing() {
     const tasks = [],
           deferred = true,
-          queue = new Queue(tasks, deferred);
-
-    return queue;
-  }
-
-  static fromDeferred(deferred) {
-    const tasks = [],
           queue = new Queue(tasks, deferred);
 
     return queue;
