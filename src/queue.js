@@ -89,5 +89,5 @@ export default class Queue {
 }
 
 function defer(func) {
-  setTimeout(func, 0);
+  setTimeout(func, 1);
 }
