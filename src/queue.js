@@ -5,21 +5,12 @@ import { arrayUtilities } from "necessary";
 const { first } = arrayUtilities;
 
 export default class Queue {
-  constructor(tasks, deferred) {
+  constructor(tasks) {
     this.tasks = tasks;
-    this.deferred = deferred;
   }
 
   getTasks() {
     return tasks;
-  }
-
-  isDeferred() {
-    return this.deferred;
-  }
-
-  setDeferred(deferred) {
-    this.deferred = deferred;
   }
 
   addTask(task) {
@@ -35,19 +26,11 @@ export default class Queue {
   executeFirstTask() {
     const firstTask = first(this.tasks);
 
-    if (this.deferred) {
-      defer(() => {
-        const task = firstTask;  ///
+    defer(() => {
+      const task = firstTask;  ///
 
-        this.executeTask(task);
-      });
-
-      return;
-    }
-
-    const task = firstTask;  ///
-
-    this.executeTask(task);
+      this.executeTask(task);
+    });
   }
 
   executeTask(task) {
@@ -81,8 +64,7 @@ export default class Queue {
 
   static fromNothing() {
     const tasks = [],
-          deferred = true,
-          queue = new Queue(tasks, deferred);
+          queue = new Queue(tasks);
 
     return queue;
   }

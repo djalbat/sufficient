@@ -11,8 +11,6 @@ export default class Scheduler {
     return this.queue;
   }
 
-  setDeferred(deferred) { this.queue.setDeferred(deferred); }
-
   addTaskToQueue(task) {
     this.queue.addTask(task);
   }
