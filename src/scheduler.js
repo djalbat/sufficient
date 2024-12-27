@@ -15,12 +15,29 @@ export default class Scheduler {
     this.queue.addTask(task);
   }
 
+  executeImmediately(callback) {
+    let successful = false;
+
+    const queueEmpty = this.queue.isEmpty();
+
+    if (queueEmpty) {
+      callback();
+
+      successful = true;
+    }
+
+    return successful;
+  }
+
   executeTaskImmediately(task) {
-    const queueEmpty = this.queue.isEmpty(),
-          successful = queueEmpty;  //
+    let successful = false;
+
+    const queueEmpty = this.queue.isEmpty();
 
     if (queueEmpty) {
       this.queue.addTask(task);
+
+      successful = true;
     }
 
     return successful;
