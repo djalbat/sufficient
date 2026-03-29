@@ -10,7 +10,7 @@ export default class Queue {
   }
 
   getTasks() {
-    return tasks;
+    return this.tasks;
   }
 
   addTask(task) {
