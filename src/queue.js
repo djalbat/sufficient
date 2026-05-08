@@ -24,13 +24,10 @@ export default class Queue {
   }
 
   executeFirstTask() {
-    const firstTask = first(this.tasks);
+    const firstTask = first(this.tasks),
+          task = firstTask;  ///
 
-    defer(() => {
-      const task = firstTask;  ///
-
-      this.executeTask(task);
-    });
+    this.executeTask(task);
   }
 
   executeTask(task) {
@@ -68,8 +65,4 @@ export default class Queue {
 
     return queue;
   }
-}
-
-function defer(func) {
-  setTimeout(func, 0);
 }
